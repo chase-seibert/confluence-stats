@@ -10,10 +10,11 @@ stats = defaultdict(lambda: defaultdict(int)) # {'user1': {'created': 1, 'edited
 
 def generate_stats(start=None, space=None, sleep=None):
     api = login_from_credentials()
-    data = api.search('type=page and space=%s and lastModified>%s' % (
-        space,
+    data = api.search('type=page and lastModified>%s %s' % (
         start,
+        (' and space=%s' % space) if space else ''
     ))
+
     print 'Found %s pages' % data['size']
     pages = data['results']
     for page in pages:
@@ -35,7 +36,7 @@ def generate_stats(start=None, space=None, sleep=None):
 
 def _day(date):
     return date[:10]
-    
+
 
 def parse_options():
     parser = argparse.ArgumentParser()
